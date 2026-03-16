@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Step 2: Medicine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #c9a0a0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 667px;
+            background: linear-gradient(135deg, #a56b6b 0%, #8b5555 100%);
+            border-radius: 30px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 8px solid #222;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #222;
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+        .step-indicator {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .tag-info {
+            background: #f0f0ff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .tag-info strong {
+            color: #667eea;
+            font-size: 1.1em;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.4em;
+        }
+        .icon {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #555;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 25px;
+        }
+        button, .back-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        button[type="submit"] {
+            background: #4CAF50;
+            color: white;
+        }
+        button[type="submit"]:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        .back-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+        .hint {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+        .dosage-calculator {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .dosage-calculator h3 {
+            color: #856404;
+            font-size: 1em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .weight-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .weight-option {
+            background: white;
+            border: 2px solid #ffc107;
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 0.85em;
+        }
+        .weight-option:hover {
+            background: #fff9e6;
+            transform: scale(1.02);
+        }
+        .weight-option.selected {
+            background: #ffc107;
+            color: white;
+            font-weight: bold;
+        }
+        .weight-label {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .weight-dose {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 2px;
+        }
+        .selected .weight-dose {
+            color: white;
+        }
+        .calculator-toggle {
+            background: #ffc107;
+            color: #856404;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .calculator-toggle:hover {
+            background: #e0a800;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .phone-frame {
+                width: 100%;
+                height: auto;
+                min-height: 600px;
+                border: 4px solid #222;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="container">
+        <div class="step-indicator">STEP 2 OF 3</div>
+        <p style="text-align: center; color: #a56b6b; font-weight: bold; font-size: 0.85em; margin-bottom: 8px;">{{ herd }}</p>
+        <div class="tag-info">
+            Treating: <strong>Tag #{{ tag_number }}</strong>
+        </div>
+        <div class="icon">💊</div>
+        <h1>Enter Medicine Administered</h1>
+        
+        <form method="POST" action="{{ url_for('step3') }}" id="medicineForm">
+            <!-- Medicine Type Selector -->
+            <div class="form-group">
+                <label for="medicine_type">Select Medication Type:</label>
+                <select id="medicine_type" name="medicine_type" required onchange="toggleMedicineInput()">
+                    <option value="">-- Select Medication --</option>
+                    <option value="LA-200">LA-200 (Oxytetracycline)</option>
+                    <option value="other">Other Medication</option>
+                </select>
+            </div>
+
+            <!-- LA-200 Dosage Calculator (hidden by default) -->
+            <div id="la200Section" class="dosage-calculator hidden">
+                <h3>🐄 Select Cattle Weight Range</h3>
+                <div class="weight-selector">
+                    <div class="weight-option" onclick="selectDosage('100 lb', '4.5 mL')">
+                        <div class="weight-label">100 lb</div>
+                        <div class="weight-dose">4.5 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('200 lb', '9.0 mL')">
+                        <div class="weight-label">200 lb</div>
+                        <div class="weight-dose">9.0 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('300 lb', '13.5 mL')">
+                        <div class="weight-label">300 lb</div>
+                        <div class="weight-dose">13.5 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('400 lb', '18.0 mL')">
+                        <div class="weight-label">400 lb</div>
+                        <div class="weight-dose">18.0 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('500 lb', '22.5 mL')">
+                        <div class="weight-label">500 lb</div>
+                        <div class="weight-dose">22.5 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('600 lb', '27.0 mL')">
+                        <div class="weight-label">600 lb</div>
+                        <div class="weight-dose">27.0 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('700 lb', '31.5 mL')">
+                        <div class="weight-label">700 lb</div>
+                        <div class="weight-dose">31.5 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('800 lb', '36.0 mL')">
+                        <div class="weight-label">800 lb</div>
+                        <div class="weight-dose">36.0 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('900 lb', '40.5 mL')">
+                        <div class="weight-label">900 lb</div>
+                        <div class="weight-dose">40.5 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('1000 lb', '45.0 mL')">
+                        <div class="weight-label">1000 lb</div>
+                        <div class="weight-dose">45.0 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('1100 lb', '49.5 mL')">
+                        <div class="weight-label">1100 lb</div>
+                        <div class="weight-dose">49.5 mL</div>
+                    </div>
+                    <div class="weight-option" onclick="selectDosage('1200 lb', '54.0 mL')">
+                        <div class="weight-label">1200 lb</div>
+                        <div class="weight-dose">54.0 mL</div>
+                    </div>
+                </div>
+                <input type="hidden" id="la200_dosage" name="la200_dosage" value="">
+            </div>
+
+            <!-- Other Medication Input (hidden by default) -->
+            <div id="otherSection" class="form-group hidden">
+                <label for="other_medicine">Enter Medication and Dosage:</label>
+                <input type="text" 
+                       id="other_medicine" 
+                       name="other_medicine" 
+                       placeholder="e.g., Penicillin 10ml, Banamine 2ml">
+                <p class="hint">Enter the medicine name and dosage</p>
+            </div>
+            
+            <!-- Add Another Treatment Checkbox -->
+            <div class="form-group" id="addAnotherSection" style="display: none; margin-top: 20px;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="add_another" name="add_another" value="yes" 
+                           style="width: auto; margin-right: 8px; cursor: pointer;">
+                    <span>Add another medication for this animal</span>
+                </label>
+            </div>
+            
+            <div class="button-group">
+                <a href="{{ url_for('step1') }}" class="back-btn">← Back</a>
+                <button type="submit">Next Step →</button>
+            </div>
+        </form>
+    </div>
+    </div>
+    
+    <script>
+        function toggleMedicineInput() {
+            const medicineType = document.getElementById('medicine_type').value;
+            const la200Section = document.getElementById('la200Section');
+            const otherSection = document.getElementById('otherSection');
+            const addAnotherSection = document.getElementById('addAnotherSection');
+            
+            // Hide both sections first
+            la200Section.classList.add('hidden');
+            otherSection.classList.add('hidden');
+            
+            // Clear previous selections
+            document.querySelectorAll('.weight-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('la200_dosage').value = '';
+            document.getElementById('other_medicine').value = '';
+            
+            // Show appropriate section
+            if (medicineType === 'LA-200') {
+                la200Section.classList.remove('hidden');
+                document.getElementById('other_medicine').removeAttribute('required');
+                addAnotherSection.style.display = 'none';
+            } else if (medicineType === 'other') {
+                otherSection.classList.remove('hidden');
+                document.getElementById('other_medicine').setAttribute('required', 'required');
+                addAnotherSection.style.display = 'block';
+            } else {
+                addAnotherSection.style.display = 'none';
+            }
+        }
+        
+        function selectDosage(weight, dose) {
+            // Remove previous selection
+            document.querySelectorAll('.weight-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            event.target.closest('.weight-option').classList.add('selected');
+            
+            // Store the dosage
+            const dosageStr = `LA-200 ${dose} (${weight} cattle)`;
+            document.getElementById('la200_dosage').value = dosageStr;
+            
+            // Show the "add another" checkbox after selection
+            document.getElementById('addAnotherSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

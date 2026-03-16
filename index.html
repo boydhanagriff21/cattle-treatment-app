@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cattle Treatment Records</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #c9a0a0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 667px;
+            background: linear-gradient(135deg, #a56b6b 0%, #8b5555 100%);
+            border-radius: 30px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 8px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #222;
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        .header-icon {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .add-new-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .add-new-btn:hover {
+            background: #45a049;
+        }
+        .treatments-list {
+            margin-top: 15px;
+        }
+        .treatments-list h2 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+        .treatment-card {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .treatment-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .treatment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .tag-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #8B4653;
+        }
+        .timestamp {
+            font-size: 0.75em;
+            color: #888;
+        }
+        .treatment-info {
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+        .treatment-info strong {
+            color: #555;
+        }
+        .treatment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .btn-edit {
+            background: #2196F3;
+            color: white;
+        }
+        .btn-edit:hover {
+            background: #0b7dda;
+        }
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+        .btn-delete:hover {
+            background: #da190b;
+        }
+        .no-records {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-size: 0.95em;
+        }
+        @media (max-width: 600px) {
+            .phone-frame {
+                width: 100%;
+                height: auto;
+                min-height: 600px;
+                border: 4px solid #222;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="container">
+        <div class="header-icon">🐄</div>
+        <h1>Cattle Treatment Records</h1>
+<p style="text-align:center; font-weight:bold; margin-bottom:10px;">
+    Working in: {{ herd }}
+</p>
+
+<a href="{{ url_for('switch_herd') }}"
+   style="display:block; text-align:center; margin-bottom:15px; color:#8B4653;">
+   🔄 Switch Herd
+</a>
+        
+        <a href="{{ url_for('step1') }}" class="add-new-btn">+ Add New Treatment</a>
+        
+        <div class="treatments-list">
+            {% if treatments %}
+                <h2 style="color: #333; margin-bottom: 15px;">
+    Treatments in {{ herd }} ({{ treatments|length }})
+</h2>
+                {% for treatment in treatments|reverse %}
+                <div class="treatment-card">
+                    <div class="treatment-header">
+                        <span class="tag-number">Tag #{{ treatment.tag_number }}</span>
+                        <span class="timestamp">{{ treatment.timestamp }}</span>
+                    </div>
+                    
+                    <div class="treatment-info">
+                        <strong>Medicine:</strong> {{ treatment.medicine }}
+                    </div>
+                    
+                    <div class="treatment-info">
+                        <strong>Notes:</strong> {{ treatment.notes if treatment.notes else 'No notes provided' }}
+                    </div>
+                    
+                    <div class="treatment-actions">
+                        <a href="{{ url_for('edit', treatment_id=treatment.id) }}" class="btn btn-edit">Edit</a>
+                        <form method="POST" action="{{ url_for('delete', treatment_id=treatment.id) }}" style="display: inline;" 
+                              onsubmit="return confirm('Are you sure you want to delete this treatment record?');">
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-records">
+                    <p>📋 No treatment records yet.</p>
+                    <p>Click "Add New Treatment" to get started!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+</body>
+</html>

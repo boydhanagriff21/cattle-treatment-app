@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Herd / Pasture</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #c9a0a0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 667px;
+            background: linear-gradient(135deg, #a56b6b 0%, #8b5555 100%);
+            border-radius: 30px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 8px solid #222;
+            position: relative;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #222;
+            border-radius: 0 0 15px 15px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            height: 100%;
+            margin-top: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .header-icon {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 20px;
+            display: block;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 1em;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 30px;
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="container">
+            <div class="header-icon">🐄</div>
+            <h1>Select Herd / Pasture</h1>
+
+            <form method="POST">
+                <label>Choose Existing Herd</label>
+                <select name="existing_herd">
+                    <option value="">-- Select --</option>
+                    {% for herd in herds %}
+                        <option value="{{ herd }}">{{ herd }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Or Enter New Herd</label>
+                <input type="text" name="new_herd" placeholder="North Pasture">
+
+                <button type="submit">Enter Herd</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
